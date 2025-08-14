@@ -1,0 +1,60 @@
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :infra:compileJava NO-SOURCE
+> Task :infra:processResources UP-TO-DATE
+> Task :infra:classes UP-TO-DATE
+> Task :infra:jar UP-TO-DATE
+> Task :api:compileJava UP-TO-DATE
+> Task :api:processResources NO-SOURCE
+> Task :api:classes UP-TO-DATE
+> Task :api:resolveMainClassName UP-TO-DATE
+
+> Task :api:bootRun
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.3.2)
+
+2025-08-14T14:40:58.378+03:00  INFO 72049 --- [pos-cafe] [           main] com.kafe.api.ApiApplication              : Starting ApiApplication using Java 21.0.8 with PID 72049 (/Users/btk/pos-cafe/api/build/classes/java/main started by btk in /Users/btk/pos-cafe/api)
+2025-08-14T14:40:58.381+03:00  INFO 72049 --- [pos-cafe] [           main] com.kafe.api.ApiApplication              : No active profile set, falling back to 1 default profile: "dev"
+2025-08-14T14:40:59.658+03:00  INFO 72049 --- [pos-cafe] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-14T14:40:59.663+03:00  INFO 72049 --- [pos-cafe] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-08-14T14:40:59.688+03:00  INFO 72049 --- [pos-cafe] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 15 ms. Found 0 JPA repository interfaces.
+2025-08-14T14:40:59.710+03:00  INFO 72049 --- [pos-cafe] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-08-14T14:40:59.712+03:00  INFO 72049 --- [pos-cafe] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-08-14T14:40:59.728+03:00  INFO 72049 --- [pos-cafe] [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 2 ms. Found 0 Redis repository interfaces.
+2025-08-14T14:41:01.015+03:00  INFO 72049 --- [pos-cafe] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-08-14T14:41:01.035+03:00  INFO 72049 --- [pos-cafe] [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-08-14T14:41:01.035+03:00  INFO 72049 --- [pos-cafe] [           main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.26]
+2025-08-14T14:41:01.128+03:00  INFO 72049 --- [pos-cafe] [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-08-14T14:41:01.129+03:00  INFO 72049 --- [pos-cafe] [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2694 ms
+2025-08-14T14:41:01.602+03:00  INFO 72049 --- [pos-cafe] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-08-14T14:41:01.729+03:00  INFO 72049 --- [pos-cafe] [           main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@39a8e2fa
+2025-08-14T14:41:01.730+03:00  INFO 72049 --- [pos-cafe] [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-08-14T14:41:01.761+03:00  INFO 72049 --- [pos-cafe] [           main] org.flywaydb.core.FlywayExecutor         : Database: jdbc:postgresql://localhost:5432/cafe (PostgreSQL 16.9)
+2025-08-14T14:41:01.794+03:00  INFO 72049 --- [pos-cafe] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Schema history table "public"."flyway_schema_history" does not exist yet
+2025-08-14T14:41:01.797+03:00  INFO 72049 --- [pos-cafe] [           main] o.f.core.internal.command.DbValidate     : Successfully validated 1 migration (execution time 00:00.014s)
+2025-08-14T14:41:01.811+03:00  INFO 72049 --- [pos-cafe] [           main] o.f.c.i.s.JdbcTableSchemaHistory         : Creating Schema History table "public"."flyway_schema_history" ...
+2025-08-14T14:41:01.897+03:00  INFO 72049 --- [pos-cafe] [           main] o.f.core.internal.command.DbMigrate      : Current version of schema "public": << Empty Schema >>
+2025-08-14T14:41:01.911+03:00  INFO 72049 --- [pos-cafe] [           main] o.f.core.internal.command.DbMigrate      : Migrating schema "public" to version "1 - init"
+2025-08-14T14:41:02.059+03:00  INFO 72049 --- [pos-cafe] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 1 migration to schema "public", now at version v1 (execution time 00:00.126s)
+2025-08-14T14:41:02.244+03:00  INFO 72049 --- [pos-cafe] [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-08-14T14:41:02.345+03:00  INFO 72049 --- [pos-cafe] [           main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2025-08-14T14:41:02.399+03:00  INFO 72049 --- [pos-cafe] [           main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-08-14T14:41:02.872+03:00  INFO 72049 --- [pos-cafe] [           main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-08-14T14:41:03.463+03:00  INFO 72049 --- [pos-cafe] [           main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-08-14T14:41:03.471+03:00  INFO 72049 --- [pos-cafe] [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-08-14T14:41:03.574+03:00  WARN 72049 --- [pos-cafe] [           main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-08-14T14:41:05.151+03:00  INFO 72049 --- [pos-cafe] [           main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 3 endpoints beneath base path '/actuator'
+2025-08-14T14:41:05.281+03:00  INFO 72049 --- [pos-cafe] [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-08-14T14:41:05.296+03:00  INFO 72049 --- [pos-cafe] [           main] com.kafe.api.ApiApplication              : Started ApiApplication in 7.514 seconds (process running for 8.014)
+2025-08-14T15:02:16.555+03:00  INFO 72049 --- [pos-cafe] [nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-08-14T15:02:16.555+03:00  INFO 72049 --- [pos-cafe] [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-08-14T15:02:16.557+03:00  INFO 72049 --- [pos-cafe] [nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
