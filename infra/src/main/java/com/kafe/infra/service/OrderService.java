@@ -3,13 +3,19 @@ package com.kafe.infra.service;
 import com.kafe.core.domain.OrderStatus;
 import com.kafe.core.domain.PaymentStatus;
 import com.kafe.core.domain.PaymentType;
+import com.kafe.core.domain.TableStatus;
+import com.kafe.core.domain.StockMovement;
+import com.kafe.core.domain.StockMovementType;
 import com.kafe.core.dto.OrderPaymentReq;
 import com.kafe.infra.entity.OrderEntity;
 import com.kafe.infra.entity.PaymentEntity;
 import com.kafe.infra.entity.TableEntity;
+import com.kafe.infra.entity.ProductEntity;
 import com.kafe.infra.repo.OrderRepository;
 import com.kafe.infra.repo.PaymentRepository;
 import com.kafe.infra.repo.TableRepository;
+import com.kafe.infra.repo.ProductRepository;
+import com.kafe.infra.repo.StockMovementRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +31,8 @@ public class OrderService {
     private final OrderRepository orderRepo;
     private final PaymentRepository paymentRepo;
     private final TableRepository tableRepo;
+    private final ProductRepository productRepo;
+    private final StockMovementRepository stockMovementRepo;
     private final StockService stockService;
 
     public OrderEntity getOrder(Long orderId) {
@@ -75,19 +83,34 @@ public class OrderService {
         orderRepo.save(order);
     }
 
-    private void closeOrder(OrderEntity order) {
-        // Masa boşaltma ve sepet temizleme mantığı
+    @Transactional
+    public void closeOrder(OrderEntity order) {
+        // Masa boşa düş
         TableEntity table = tableRepo.findById(order.getTableId())
-                .orElseThrow(() -> new NoSuchElementException("Table not found: " + order.getTableId()));
-        table.setStatus("AVAILABLE");
+                .orElseThrow(() -> new IllegalArgumentException("Table not found"));
+        table.setStatus("AVAILABLE"); // Using existing string status for compatibility
         tableRepo.save(table);
-        
-        // Stok düşümü
+
+        // Stok düş
         if (order.getItems() != null) {
             for (var item : order.getItems()) {
+                // Create stock movement record
+                StockMovement movement = new StockMovement();
+                movement.setProductId(item.getProductId());
+                movement.setMovementType(StockMovementType.OUT);
+                movement.setQuantity(item.getQty());
+                movement.setReason("SALE");
+                // Note: We can't save the domain entity directly, so we'll use the existing service
+                
+                // Use existing stock service for compatibility
                 stockService.applySaleForOrderItem(item.getProductId(), item.getQty(), order.getId());
             }
         }
+
+        // Siparişi kapat
+        order.setStatus(OrderStatus.PAID);
+        order.setClosedAt(LocalDateTime.now());
+        orderRepo.save(order);
     }
 
     @Transactional
