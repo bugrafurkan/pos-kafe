@@ -22,10 +22,17 @@ subprojects {
 }
 
 project(':core') {
+  apply plugin: 'org.springframework.boot'
   dependencies {
-    implementation 'org.springframework:spring-context'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
+  }
+  bootJar {
+    enabled = false
+  }
+  jar {
+    enabled = true
   }
 }
 
@@ -56,9 +63,12 @@ project(':api') {
   apply plugin: 'org.springframework.boot'
   dependencies {
     implementation project(':infra')     // api -> infra -> core
+    implementation project(':core')      // api -> core (for DTOs)
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
   }
 }
 
