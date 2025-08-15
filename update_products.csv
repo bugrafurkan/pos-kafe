@@ -1,0 +1,7 @@
+sku,name,price,category,stockQty,reorderLevel
+LATTE-001,Latte Coffee Updated,30.00,Beverages,12.000,6.000
+CAPPUCCINO-001,Cappuccino,22.00,Beverages,8.000,3.000
+ESPRESSO-001,Espresso,18.00,Beverages,15.000,7.000
+MILK-001,Fresh Milk,15.00,Ingredients,20.000,10.000
+SUGAR-001,White Sugar,8.00,Ingredients,50.000,20.000
+NEW-PRODUCT,New Product,35.00,Food,25.000,10.000

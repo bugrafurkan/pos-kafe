@@ -5,5 +5,5 @@ import java.math.BigDecimal;
 
 public class ProductPriceChangeReq {
   @NotNull @DecimalMin("0.0") public BigDecimal newPrice;
-  @NotBlank public String reason; // MANUAL | PROMO | CORRECTION
+  @Size(max=200) public String reason;
 }

@@ -1,6 +1,7 @@
 package com.kafe.core.dto;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 public class ProductResp {
   public Long id;
@@ -15,4 +16,6 @@ public class ProductResp {
   public BigDecimal minPrice;
   public BigDecimal maxPrice;
   public Boolean active;
+  public OffsetDateTime createdAt;
+  public OffsetDateTime updatedAt;
 }

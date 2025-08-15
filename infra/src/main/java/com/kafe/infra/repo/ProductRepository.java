@@ -4,6 +4,7 @@ import com.kafe.infra.entity.ProductEntity;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
@@ -24,4 +25,6 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
                              Pageable pageable);
 
   boolean existsByBarcode(String barcode);
+  
+  Optional<ProductEntity> findBySku(String sku);
 }

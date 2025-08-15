@@ -1,6 +1,10 @@
 package com.kafe.api.controller;
 
-import com.kafe.core.dto.*;
+import com.kafe.core.dto.ProductCreateReq;
+import com.kafe.core.dto.ProductPriceChangeReq;
+import com.kafe.core.dto.ProductResp;
+import com.kafe.core.dto.ProductUpdateReq;
+import com.kafe.core.dto.PagedResp;
 import com.kafe.infra.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
