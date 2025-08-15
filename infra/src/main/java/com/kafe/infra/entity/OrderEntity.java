@@ -1,47 +1,46 @@
 package com.kafe.infra.entity;
 
-import com.kafe.core.domain.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.OffsetDateTime;
 
-@Entity @Table(name="\"order\"")
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Entity
+@Table(name = "\"order\"")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class OrderEntity {
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY) 
-    Long id;
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name="table_id", nullable=false) 
-    Long tableId;
+    @Column(name="table_id")
+    private Long tableId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable=false)
-    @Builder.Default
-    OrderStatus status = OrderStatus.OPEN;
+    @Column(nullable=false, length=24)
+    private String status; // OPEN, PENDING_PAYMENT, PAID, VOID
 
-    @Column(name="pre_discount_total", nullable=false, precision=12, scale=2)
-    @Builder.Default
-    BigDecimal subtotal = BigDecimal.ZERO;
+    @Column(name="pre_discount_total", precision=12, scale=2)
+    private BigDecimal preDiscountTotal;
 
     @Column(name="discount_rate", precision=6, scale=3)
-    BigDecimal discountRate;
+    private BigDecimal discountRate;
 
-    @Column(name="grand_total", nullable=false, precision=12, scale=2)
-    @Builder.Default
-    BigDecimal total = BigDecimal.ZERO;
+    @Column(name="discount_amount", precision=12, scale=2)
+    private BigDecimal discountAmount;
 
-    @Column(name="opened_at", nullable=false)
-    @Builder.Default
-    LocalDateTime openedAt = LocalDateTime.now();
+    @Column(name="subtotal_excl_vat", precision=12, scale=2)
+    private BigDecimal subtotalExclVat;
+
+    @Column(name="vat_total", precision=12, scale=2)
+    private BigDecimal vatTotal;
+
+    @Column(name="grand_total", precision=12, scale=2)
+    private BigDecimal grandTotal;
+
+    @Column(name="opened_at")
+    private OffsetDateTime openedAt;
 
     @Column(name="closed_at")
-    LocalDateTime closedAt;
+    private OffsetDateTime closedAt;
 
-    @Column(length=255)
-    String note;
-
-    @OneToMany(mappedBy="order", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    List<OrderItemEntity> items;
+    private String note;
 }

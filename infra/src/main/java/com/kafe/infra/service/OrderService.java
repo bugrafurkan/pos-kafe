@@ -1,26 +1,18 @@
 package com.kafe.infra.service;
 
-import com.kafe.core.domain.OrderStatus;
-import com.kafe.core.domain.PaymentStatus;
-import com.kafe.core.domain.PaymentType;
-import com.kafe.core.domain.TableStatus;
-import com.kafe.core.domain.StockMovement;
-import com.kafe.core.domain.StockMovementType;
 import com.kafe.core.dto.OrderPaymentReq;
 import com.kafe.infra.entity.OrderEntity;
 import com.kafe.infra.entity.PaymentEntity;
 import com.kafe.infra.entity.TableEntity;
-import com.kafe.infra.entity.ProductEntity;
 import com.kafe.infra.repo.OrderRepository;
 import com.kafe.infra.repo.PaymentRepository;
 import com.kafe.infra.repo.TableRepository;
-import com.kafe.infra.repo.ProductRepository;
-import com.kafe.infra.repo.StockMovementRepository;
+import com.kafe.infra.repo.OrderItemRepository2;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.NoSuchElementException;
 import java.math.BigDecimal;
 
@@ -31,8 +23,7 @@ public class OrderService {
     private final OrderRepository orderRepo;
     private final PaymentRepository paymentRepo;
     private final TableRepository tableRepo;
-    private final ProductRepository productRepo;
-    private final StockMovementRepository stockMovementRepo;
+    private final OrderItemRepository2 itemRepo;
     private final StockService stockService;
 
     public OrderEntity getOrder(Long orderId) {
@@ -44,38 +35,38 @@ public class OrderService {
     public void finalizePayment(Long orderId, OrderPaymentReq req) {
         OrderEntity order = getOrder(orderId);
         
-        if (order.getStatus() == OrderStatus.PAID) {
+        if ("PAID".equals(order.getStatus())) {
             throw new IllegalStateException("Order is already paid");
         }
 
         PaymentEntity payment = PaymentEntity.builder()
-                .order(order)
-                .type(req.paymentType)
-                .amount(order.getTotal())
-                .status(PaymentStatus.INITIATED)
+                .orderId(orderId)
+                .method(req.paymentType.toString())
+                .amount(order.getGrandTotal())
+                .status("INITIATED")
                 .build();
 
-        if (req.paymentType == PaymentType.CASH) {
+        if ("CASH".equalsIgnoreCase(req.paymentType.toString())) {
             // CASH payment - immediate capture
-            payment.setStatus(PaymentStatus.CAPTURED);
-            payment.setApprovedAt(LocalDateTime.now());
-            order.setStatus(OrderStatus.PAID);
-            order.setClosedAt(LocalDateTime.now());
+            payment.setStatus("CAPTURED");
+            payment.setApprovedAt(OffsetDateTime.now());
+            order.setStatus("PAID");
+            order.setClosedAt(OffsetDateTime.now());
             
             closeOrder(order);
-        } else if (req.paymentType == PaymentType.CARD) {
+        } else if ("CARD".equalsIgnoreCase(req.paymentType.toString())) {
             if (req.cardPaid != null && req.cardPaid) {
                 // CARD payment - paid
-                payment.setStatus(PaymentStatus.CAPTURED);
-                payment.setApprovedAt(LocalDateTime.now());
-                order.setStatus(OrderStatus.PAID);
-                order.setClosedAt(LocalDateTime.now());
+                payment.setStatus("CAPTURED");
+                payment.setApprovedAt(OffsetDateTime.now());
+                order.setStatus("PAID");
+                order.setClosedAt(OffsetDateTime.now());
                 
                 closeOrder(order);
             } else {
                 // CARD payment - not paid
-                payment.setStatus(PaymentStatus.FAILED);
-                order.setStatus(OrderStatus.PENDING_PAYMENT);
+                payment.setStatus("FAILED");
+                order.setStatus("PENDING_PAYMENT");
             }
         }
 
@@ -88,28 +79,18 @@ public class OrderService {
         // Masa boşa düş
         TableEntity table = tableRepo.findById(order.getTableId())
                 .orElseThrow(() -> new IllegalArgumentException("Table not found"));
-        table.setStatus("AVAILABLE"); // Using existing string status for compatibility
+        table.setStatus("AVAILABLE");
         tableRepo.save(table);
 
         // Stok düş
-        if (order.getItems() != null) {
-            for (var item : order.getItems()) {
-                // Create stock movement record
-                StockMovement movement = new StockMovement();
-                movement.setProductId(item.getProductId());
-                movement.setMovementType(StockMovementType.OUT);
-                movement.setQuantity(item.getQty());
-                movement.setReason("SALE");
-                // Note: We can't save the domain entity directly, so we'll use the existing service
-                
-                // Use existing stock service for compatibility
-                stockService.applySaleForOrderItem(item.getProductId(), item.getQty(), order.getId());
-            }
+        var items = itemRepo.findByOrderId(order.getId());
+        for (var item : items) {
+            stockService.applySaleForOrderItem(item.getProductId(), item.getQty(), order.getId());
         }
 
         // Siparişi kapat
-        order.setStatus(OrderStatus.PAID);
-        order.setClosedAt(LocalDateTime.now());
+        order.setStatus("PAID");
+        order.setClosedAt(OffsetDateTime.now());
         orderRepo.save(order);
     }
 
@@ -129,10 +110,14 @@ public class OrderService {
         
         OrderEntity order = OrderEntity.builder()
                 .tableId(tableId)
-                .status(OrderStatus.OPEN)
-                .subtotal(BigDecimal.ZERO)
-                .total(BigDecimal.ZERO)
-                .openedAt(LocalDateTime.now())
+                .status("OPEN")
+                .preDiscountTotal(BigDecimal.ZERO)
+                .discountRate(BigDecimal.ZERO)
+                .discountAmount(BigDecimal.ZERO)
+                .subtotalExclVat(BigDecimal.ZERO)
+                .vatTotal(BigDecimal.ZERO)
+                .grandTotal(BigDecimal.ZERO)
+                .openedAt(OffsetDateTime.now())
                 .build();
         
         return orderRepo.save(order);

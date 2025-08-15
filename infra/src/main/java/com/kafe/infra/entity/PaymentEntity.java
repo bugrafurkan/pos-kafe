@@ -1,39 +1,35 @@
 package com.kafe.infra.entity;
 
-import com.kafe.core.domain.PaymentStatus;
-import com.kafe.core.domain.PaymentType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
-@Entity @Table(name="payment")
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Entity
+@Table(name = "payment")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class PaymentEntity {
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY) 
-    Long id;
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="order_id", nullable=false)
-    OrderEntity order;
+    @Column(name="order_id", nullable=false)
+    private Long orderId;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="method", nullable=false)
-    PaymentType type;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable=false)
-    PaymentStatus status;
+    @Column(nullable=false, length=16)
+    private String method; // CASH, CARD
 
     @Column(nullable=false, precision=12, scale=2)
-    BigDecimal amount;
+    private BigDecimal amount;
 
-    @Column(name="approved_at")
-    LocalDateTime approvedAt;
+    @Column(nullable=false, length=24)
+    private String status; // INITIATED, AUTHORIZED, CAPTURED, FAILED, REFUNDED
 
     @Column(name="pos_txn_id", length=64)
-    String posTxnId;
+    private String posTxnId;
 
-    @Column(name="details_json", columnDefinition="jsonb")
-    String detailsJson;
+    @Column(name="approved_at")
+    private OffsetDateTime approvedAt;
+
+    @Column(name="details_json")
+    private String detailsJson;
 }

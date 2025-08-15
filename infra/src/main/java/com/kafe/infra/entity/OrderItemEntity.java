@@ -4,40 +4,34 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
 
-@Entity @Table(name="order_item")
-@Getter @Setter @Builder @NoArgsConstructor @AllArgsConstructor
+@Entity
+@Table(name = "order_item")
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class OrderItemEntity {
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY) 
-    Long id;
+    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="order_id", nullable=false)
-    OrderEntity order;
+    @Column(name="order_id", nullable=false)
+    private Long orderId;
 
     @Column(name="product_id", nullable=false)
-    Long productId;
-
-    @Column(name="product_name", nullable=false, length=200)
-    String productName;
-
-    @Column(name="unit_price", nullable=false, precision=12, scale=2)
-    BigDecimal unitPrice;
+    private Long productId;
 
     @Column(nullable=false, precision=12, scale=3)
-    BigDecimal qty;
+    private BigDecimal qty;
+
+    @Column(name="unit_price", nullable=false, precision=12, scale=2)
+    private BigDecimal unitPrice;
 
     @Column(name="line_total", nullable=false, precision=12, scale=2)
-    BigDecimal lineTotal;
+    private BigDecimal lineTotal;
 
     @Column(name="vat_rate", nullable=false, precision=5, scale=2)
-    @Builder.Default
-    BigDecimal vatRate = BigDecimal.ZERO;
+    private BigDecimal vatRate;
 
     @Column(name="vat_amount", nullable=false, precision=12, scale=2)
-    @Builder.Default
-    BigDecimal vatAmount = BigDecimal.ZERO;
+    private BigDecimal vatAmount;
 
     @Column(name="applied_discount_amount", nullable=false, precision=12, scale=2)
-    @Builder.Default
-    BigDecimal appliedDiscountAmount = BigDecimal.ZERO;
+    private BigDecimal appliedDiscountAmount;
 }
