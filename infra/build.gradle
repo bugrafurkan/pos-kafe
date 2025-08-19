@@ -17,4 +17,10 @@ dependencies {
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testImplementation 'org.testcontainers:junit-jupiter'
   testImplementation 'org.testcontainers:postgresql'
+  testImplementation 'com.h2database:h2'
+}
+
+// Disable bootJar for infra module since it doesn't have a main class
+bootJar {
+  enabled = false
 }
